@@ -5,6 +5,7 @@ using namespace boost::python;
 BOOST_PYTHON_MODULE(RF24_lib)
 {
   class_<RF24>("RF24", init<uint8_t, uint8_t, uint32_t>())
+    .def(init<uint8_t, uint8_t >())
     .def("begin", &RF24::begin)
     .def("startListening", &RF24::startListening)
     .def("stopListening", &RF24::stopListening)
@@ -56,4 +57,23 @@ BOOST_PYTHON_MODULE(RF24_lib)
     .def("maskIRQ", &RF24::maskIRQ)
     .def("setAddressWidth", &RF24::setAddressWidth)
     ;
+
+  enum_<rf24_pa_dbm_e>("rf24_pa_dbm_e")
+    .value("RF24_PA_MIN", RF24_PA_MIN)
+    .value("RF24_PA_LOW", RF24_PA_LOW)
+    .value("RF24_PA_HIGH", RF24_PA_HIGH)
+    .value("RF24_PA_MAX", RF24_PA_MAX)
+    .value("RF24_PA_ERROR", RF24_PA_ERROR)
+    ;
+  enum_<rf24_datarate_e>("rf24_datarate_e")
+    .value("RF24_1MBPS", RF24_1MBPS)
+    .value("RF24_2MBPS", RF24_2MBPS)
+    .value("RF24_250KBPS", RF24_250KBPS)
+    ;
+  enum_<rf24_crclength_e>("rf24_crclength_e")
+    .value("RF24_CRC_DISABLED", RF24_CRC_DISABLED)
+    .value(" RF24_CRC_8",  RF24_CRC_8)
+    .value(" RF24_CRC_16",  RF24_CRC_16)
+    ;
+    
 }

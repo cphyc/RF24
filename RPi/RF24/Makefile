@@ -1,3 +1,6 @@
+# compiler
+$CC = g++
+
 # location of the Python header files
 PYTHON_VERSION = 2.7
 PYTHON_INCLUDE = /usr/include/python$(PYTHON_VERSION)
@@ -8,14 +11,15 @@ BOOST_INC = /usr/include
 BOOST_LIB = /usr/lib
 
 # compile mesh classes
-TARGET = RF24_py
+TARGET = RF24_py.so
 SOURCES =  RF24.cpp RF24_py.cpp
-OBJECT = $(SOURCES:.cpp=.o)
+OBJECTS = $(SOURCES:.cpp=.o)
 
-$(TARGET).so: $(OBJECT)
-	g++ -shared -Wl,--export-dynamic $(OBJECT) -L$(BOOST_LIB) -lboost_python -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET).so
+$(TARGET): $(OBJECTS)
+	$(CC) -shared -Wl,--export-dynamic $(OBJECT) -L$(BOOST_LIB) -lboost_python -L/usr/lib/python$(PYTHON_VERSION)/config -lpython$(PYTHON_VERSION) -o $(TARGET)
 
 .cpp.o: 
-	g++ -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $<
+	$(CC) -I$(PYTHON_INCLUDE) -I$(BOOST_INC) -fPIC -c $< -o $@
 
-clean: rm *.{so,o,so*}
+clean: 
+	rm $(OBJECTS) $(TARGET)

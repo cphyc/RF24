@@ -246,55 +246,55 @@ class RF24
    *
    * Creates a new instance of this driver.  Before using, you create an instance
    * and send in the unique pins that this chip is connected to.
-   *
-   * @param _cepin The pin attached to Chip Enable on the RF module
-   * @param _cspin The pin attached to Chip Select
-   */
-  RF24(uint8_t _cepin, uint8_t _cspin);
-  RF24(uint8_t _cepin, uint8_t _cspin, uint32_t spispeed );
+    *
+    * @param _cepin The pin attached to Chip Enable on the RF module
+    * @param _cspin The pin attached to Chip Select
+    */
+   RF24(uint8_t _cepin, uint8_t _cspin);
+   RF24(uint8_t _cepin, uint8_t _cspin, uint32_t spispeed );
 
-  /**
-   * Begin operation of the chip
-   *
-   * Call this in setup(), before calling any other methods.
-   */
-  bool begin(void);
+   /**
+    * Begin operation of the chip
+    *
+    * Call this in setup(), before calling any other methods.
+    */
+   bool begin(void);
 
-  /**
-   * Start listening on the pipes opened for reading.
-   *
-   * Be sure to call openReadingPipe() first.  Do not call write() while
-   * in this mode, without first calling stopListening().  Call
-   * isAvailable() to check for incoming traffic, and read() to get it.
-   */
-  void startListening(void);
+   /**
+    * Start listening on the pipes opened for reading.
+    *
+    * Be sure to call openReadingPipe() first.  Do not call write() while
+    * in this mode, without first calling stopListening().  Call
+    * isAvailable() to check for incoming traffic, and read() to get it.
+    */
+   void startListening(void);
 
-  /**
-   * Stop listening for incoming messages
-   *
-   * Do this before calling write().
-   */
-  void stopListening(void);
+   /**
+    * Stop listening for incoming messages
+    *
+    * Do this before calling write().
+    */
+   void stopListening(void);
 
-  /**
-   * Write to the open writing pipe
-   *
-   * Be sure to call openWritingPipe() first to set the destination
-   * of where to write to.
-   *
-   * This blocks until the message is successfully acknowledged by
-   * the receiver or the timeout/retransmit maxima are reached.  In
-   * the current configuration, the max delay here is 60ms.
-   *
-   * The maximum size of data written is the fixed payload size, see
-   * getPayloadSize().  However, you can write less, and the remainder
-   * will just be filled with zeroes.
-   *
-   * @param buf Pointer to the data to be sent
-   * @param len Number of bytes to be sent
-   * @return True if the payload was delivered successfully false if not
-   */
-  bool write( const void* buf, uint8_t len );
+   /**
+    * Write to the open writing pipe
+    *
+    * Be sure to call openWritingPipe() first to set the destination
+    * of where to write to.
+    *
+    * This blocks until the message is successfully acknowledged by
+    * the receiver or the timeout/retransmit maxima are reached.  In
+    * the current configuration, the max delay here is 60ms.
+    *
+    * The maximum size of data written is the fixed payload size, see
+    * getPayloadSize().  However, you can write less, and the remainder
+    * will just be filled with zeroes.
+    *
+    * @param buf Pointer to the data to be sent
+    * @param len Number of bytes to be sent
+    * @return True if the payload was delivered successfully false if not
+    */
+   bool write( const void* buf, uint8_t len );
 
   /**
    * Test whether there are bytes available to be read

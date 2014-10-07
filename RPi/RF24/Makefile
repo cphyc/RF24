@@ -25,7 +25,8 @@ LIBNAME=$(LIB).so.1.0
 HEADER_DIR=${PREFIX}/include/RF24
 
 # The recommended compiler flags for the Raspberry Pi
-CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
+#CCFLAGS=-Ofast -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s
+CCFLAGS=-Ofast 
 
 # make all
 # reinstall the library after each recompilation
@@ -34,7 +35,7 @@ all: librf24-bcm
 # Make the library
 librf24-bcm: RF24.o bcm2835.o 
 	g++ -shared -Wl,-soname,$@.so.1 ${CCFLAGS} -o ${LIBNAME} $^
-	
+
 # Library parts
 RF24.o: RF24.cpp
 	g++ -Wall -fPIC ${CCFLAGS} -c $^

@@ -51,7 +51,7 @@ typedef enum { RF24_CRC_DISABLED = 0, RF24_CRC_8, RF24_CRC_16 } rf24_crclength_e
 
 class RF24
 {
-public:
+ public:
   /**
    * Enable error detection by un-commenting #define FAILURE_HANDLING in RF24_config.h
    * If a failure has been detected, it usually indicates a hardware issue. By default the library
@@ -67,15 +67,15 @@ public:
    *    radio.begin(); 					     // Attempt to re-configure the radio with defaults
    *    radio.failureDetected = 0;		     // Reset the detection value
    *	radio.openWritingPipe(addresses[1]); // Re-configure pipe addresses
-    *   radio.openReadingPipe(1,addresses[0]);
+   *   radio.openReadingPipe(1,addresses[0]);
    *    report_failure();               	 // Blink leds, send a message, etc. to indicate failure
    *  }
    * @endcode
    **/
-   #if defined (FAILURE_HANDLING)
-	 bool failureDetect; 
-   #endif
-private:
+#if defined (FAILURE_HANDLING)
+  bool failureDetect; 
+#endif
+ private:
   uint8_t ce_pin; /**< "Chip Enable" pin, activates the RX or TX role */
   uint8_t csn_pin; /**< SPI Chip select */
   uint16_t spi_speed; /**< SPI Bus Speed */
@@ -91,7 +91,7 @@ private:
   uint8_t spi_rxbuff[32+1] ; //SPI receive buffer (payload max 32 bytes)
   uint8_t spi_txbuff[32+1] ; //SPI transmit buffer (payload max 32 bytes + 1 byte for the command)
 
-protected:
+ protected:
   /**
    * @name Low-level internal interface.
    *
@@ -227,13 +227,13 @@ protected:
    */
   void toggle_features(void);
   
-  #if defined (FAILURE_HANDLING)
-	void errNotify(void);
-  #endif
+#if defined (FAILURE_HANDLING)
+  void errNotify(void);
+#endif
   
   /**@}*/
 
-public:
+ public:
   /**
    * @name Primary public interface
    *
@@ -453,7 +453,7 @@ public:
    */
   void enableDynamicPayloads(void);
 
-   /**
+  /**
    * Enable dynamic ACKs (single write multicasting) for chosen messages
    *
    * @note To enable full multicasting or per-pipe multicast, use setAutoAck()
@@ -644,20 +644,20 @@ public:
    */
   void powerUp(void) ;
 
-/**
-  * Write for single NOACK writes. Disables acknowledgements/autoretries for a single write.
-  *
-  * @note enableDynamicAck() must be called to enable this feature
-  *
-  * Can be used with enableAckPayload() to request a response
-  * @see enableDynamicAck()
-  * @see setAutoAck()
-  * @see write()
-  *
-  * @param buf Pointer to the data to be sent
-  * @param len Number of bytes to be sent
-  * @param multicast Request ACK (0), NOACK (1)
-  */
+  /**
+   * Write for single NOACK writes. Disables acknowledgements/autoretries for a single write.
+   *
+   * @note enableDynamicAck() must be called to enable this feature
+   *
+   * Can be used with enableAckPayload() to request a response
+   * @see enableDynamicAck()
+   * @see setAutoAck()
+   * @see write()
+   *
+   * @param buf Pointer to the data to be sent
+   * @param len Number of bytes to be sent
+   * @param multicast Request ACK (0), NOACK (1)
+   */
   bool write( const void* buf, uint8_t len, const bool multicast );
 
   /**
@@ -694,16 +694,16 @@ public:
   bool writeFast( const void* buf, uint8_t len );
 
   /**
-  * WriteFast for single NOACK writes. Disables acknowledgements/autoretries for a single write.
-  *
-  * @note enableDynamicAck() must be called to enable this feature
-  * @see enableDynamicAck()
-  * @see setAutoAck()
-  *
-  * @param buf Pointer to the data to be sent
-  * @param len Number of bytes to be sent
-  * @param multicast Request ACK (0) or NOACK (1)
-  */
+   * WriteFast for single NOACK writes. Disables acknowledgements/autoretries for a single write.
+   *
+   * @note enableDynamicAck() must be called to enable this feature
+   * @see enableDynamicAck()
+   * @see setAutoAck()
+   *
+   * @param buf Pointer to the data to be sent
+   * @param len Number of bytes to be sent
+   * @param multicast Request ACK (0) or NOACK (1)
+   */
   bool writeFast( const void* buf, uint8_t len, const bool multicast );
 
   /**
@@ -762,7 +762,7 @@ public:
    * @return True if transmission is successful
    *
    */
-   bool txStandBy();
+  bool txStandBy();
 
   /**
    * @note Optimization: New Command
@@ -782,7 +782,7 @@ public:
    * @return True if transmission is successful
    *
    */
-   bool txStandBy(uint32_t timeout);
+  bool txStandBy(uint32_t timeout);
 
   /**
    * Test whether there are bytes available to be read
@@ -795,7 +795,7 @@ public:
    */
   bool available(uint8_t* pipe_num);
 
-/**
+  /**
    * Non-blocking write to the open writing pipe used for buffered writes
    *
    * @note Optimization: This function now leaves the CE pin high, so the radio
@@ -864,7 +864,7 @@ public:
    * After issuing reUseTX(), it will keep reending the same payload forever or until
    * a payload is written to the FIFO, or a flush_tx command is given.
    */
-   void reUseTX();
+  void reUseTX();
 
   /**
    * Write an ack payload for the specified pipe
@@ -931,7 +931,7 @@ public:
    */
   bool testRPD(void) ;
 
-    /**
+  /**
    * Test whether this is a real radio, or a mock shim for
    * debugging.  Setting either pin to 0xff is the way to
    * indicate that this is not a real radio.
@@ -941,28 +941,28 @@ public:
   bool isValid() { return ce_pin != 0xff && csn_pin != 0xff; }
 
   /**
-  * The radio will generate interrupt signals when a transmission is complete,
-  * a transmission fails, or a payload is received. This allows users to mask
-  * those interrupts to prevent them from generating a signal on the interrupt
-  * pin.
-  *
-  * @code
-  * 	Mask all interrupts except the receive interrupt:
-  *
-  *		radio.maskIRQ(1,1,0);
-  * @endcode
-  *
-  * @param tx_ok  Mask transmission complete interrupts
-  * @param tx_fail  Mask transmit failure interrupts
-  * @param rx_ready Mask payload received interrupts
-  */
+   * The radio will generate interrupt signals when a transmission is complete,
+   * a transmission fails, or a payload is received. This allows users to mask
+   * those interrupts to prevent them from generating a signal on the interrupt
+   * pin.
+   *
+   * @code
+   * 	Mask all interrupts except the receive interrupt:
+   *
+   *		radio.maskIRQ(1,1,0);
+   * @endcode
+   *
+   * @param tx_ok  Mask transmission complete interrupts
+   * @param tx_fail  Mask transmit failure interrupts
+   * @param rx_ready Mask payload received interrupts
+   */
   void maskIRQ(bool tx_ok,bool tx_fail,bool rx_ready);
 
   /**
-  * Set the address width from 3 to 5 bytes (24, 32 or 40 bit)
-  *
-  * @param a_width The address width to use: 3,4 or 5
-  */
+   * Set the address width from 3 to 5 bytes (24, 32 or 40 bit)
+   *
+   * @param a_width The address width to use: 3,4 or 5
+   */
 
   void setAddressWidth(uint8_t a_width);
 

@@ -55,5 +55,5 @@ BOOST_PYTHON_MODULE(RF24_lib)
     .def("isValid", &RF24::isValid)
     .def("maskIRQ", &RF24::maskIRQ)
     .def("setAddressWidth", &RF24::setAddressWidth)
-    ; // The 
+    ;
 }
